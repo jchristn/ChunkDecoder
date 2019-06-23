@@ -11,7 +11,8 @@
     <RepositoryUrl>https://github.com/jchristn/ChunkDecoder/</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>chunk encoding http encode transfer</PackageTags>
-    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageReleaseNotes>Added callbacks for handling signatures and handling chunks as they are read.</PackageReleaseNotes>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

@@ -7,6 +7,8 @@ ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly 
 ## New in v1.0.x
 
 - Initial release
+- Callbacks when signatures are found
+- Callbacks as chunks are read
 - Does not support signature verification of chunk data
 
 ## Usage
@@ -38,11 +40,11 @@ The final line ends with ```0<crlf><crlf>``` indicating the end of the stream.
 
 For instance:
 ```
-6<crlf>        // 6 bytes of data will follow
-Hello_<crlf>   // data.  The value is 'Hello_' where _ is actually a space
-5<crlf>        // 5 bytes of data will follow
-World<crlf>    // data.  The value is 'World'
-0<crlf><crlf>  // end of stream
+6<crlf>        // 6 bytes of data will follow.
+Hello_<crlf>   // data.  The value is 'Hello_' where _ is actually a space.
+5<crlf>        // 5 bytes of data will follow.
+World<crlf>    // data.  The value is 'World'.
+0<crlf><crlf>  // end of stream.
 ```
 Results in:
 ```
@@ -54,16 +56,37 @@ For more information, please see:
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
 - https://en.wikipedia.org/wiki/Chunked_transfer_encoding
 
-## Limitations
+## Callbacks
 
-Chunk transfer encoding commonly includes key-value pairs in the length line, where the length and the key-value pairs are all separated by semicolons.  These key-value pairs can be used for additional processing including validation of the included segment of data.
-
-For instance:
+In cases where the supplied data has signatures, i.e.
 ```
-6;chunk-signature=A917FE91...;anotherkey=anothervalue<crlf>
+6;chunk-signature=foo<crlf>  // 6 bytes of data will follow, and the signature of the chunk is foo.
+Hello_<crlf>                 // data.  The value is 'Hello ' and _ is actually a space.
+5;chunk-signature:bar<crlf>  // 5 bytes of data will follow, and the signature of the chunk is bar.
+World<crlf>                  // data.  The value is 'World'.
+0;<crlf><crlf>               // end of stream.
 ```
 
-The current release of ChunkDecoder does NOT support signature validation or processing of additional key-value pairs in the length line.
+You can assigned the ```Decoder.ProcessSignature``` callback, which has the following signature:
+```
+using System.Collections.Generic;
+static bool ProcessSignature(KeyValuePair<string, string>, byte[] data)
+{
+	return true;
+}
+```
+
+This method should return ```true```, otherwise ChunkDecoder will assume there is an error and terminate.
+
+If you wish to process each chunk as it is read, set the ```Decoder.ProcessChunk``` callback, which has the followning signature:
+```
+static bool ProcessChunk(byte[] data)
+{
+	return true;
+}
+```
+
+This method should also return ```true```, for the same reason.  ProcessChunk is always called after ProcessSignature.
 
 ## Version History
 

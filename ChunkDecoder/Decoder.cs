@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace ChunkDecoder
 {
@@ -10,9 +12,42 @@ namespace ChunkDecoder
     {
         #region Public-Members
 
+        /// <summary>
+        /// Enable or disable console debugging.
+        /// </summary>
+        public bool ConsoleDebug
+        {
+            get
+            {
+                return _ConsoleDebug;
+            }
+            set
+            {
+                _ConsoleDebug = value;
+            }
+        }
+
+        /// <summary>
+        /// Callback to invoke to process signatures found in the chunk length line.
+        /// Called before ProcessChunk.
+        /// Return 'true' to continue operation.  
+        /// Return 'false' to terminate.
+        /// </summary>
+        public Func<KeyValuePair<string, string>, byte[], bool> ProcessSignature = null;
+
+        /// <summary>
+        /// Callback to invoke to process a chunk.
+        /// Called after ProcessSignature.
+        /// Return 'true' to continue operation.
+        /// Return 'false' to terminate.
+        /// </summary>
+        public Func<byte[], bool> ProcessChunk = null;
+
         #endregion
 
         #region Private-Members
+
+        private bool _ConsoleDebug = false;
 
         #endregion
 
@@ -91,6 +126,7 @@ namespace ChunkDecoder
             {
                 #region Read-Chunk-Length
 
+                Log("Reading chunk length");
                 headerBuffer = new byte[1];
                 header = "";
 
@@ -99,10 +135,12 @@ namespace ChunkDecoder
                     bytesRead = stream.Read(headerBuffer, 0, headerBuffer.Length);
                     if (bytesRead > 0)
                     {
+                        Log("| Read " + bytesRead + ": " + Encoding.UTF8.GetString(headerBuffer).Trim());
                         header += Convert.ToChar(headerBuffer[0]);
                         if ((int)headerBuffer[0] == 10)
                         {
                             // end of header
+                            Log("| End of header detected");
                             break;
                         }
                     }
@@ -110,13 +148,52 @@ namespace ChunkDecoder
 
                 #endregion
 
-                #region Check-for-End
+                #region Check-for-Key-Value-Pairs
 
                 header = header.Trim();
-                if (!String.IsNullOrEmpty(header)) segmentLength = Convert.ToInt64(header, 16);
+                string segmentLengthStr = "";
+                Dictionary<string, string> signatures = new Dictionary<string, string>();
+
+                if (header.Contains(";"))
+                {
+                    Log("Embedded key-value pairs detected");
+                    string[] vals = header.Split(';');
+                    segmentLengthStr = vals[0];
+
+                    if (vals.Length > 1)
+                    {
+                        for (int i = 1; i < vals.Length; i++)
+                        {
+                            string[] kvp = vals[i].Split('=');
+                            if (kvp.Length == 1)
+                            {
+                                Log("| " + kvp[0] + ": null");
+                                signatures.Add(kvp[0], null);
+                            }
+                            if (kvp.Length == 2)
+                            {
+                                Log("| " + kvp[0] + ": " + kvp[1]);
+                                signatures.Add(kvp[0], kvp[1]);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    segmentLengthStr = header;
+                }
+
+                Log("Reading data of length " + segmentLengthStr);
+
+                #endregion
+
+                #region Check-for-End
+
+                if (!String.IsNullOrEmpty(segmentLengthStr)) segmentLength = Convert.ToInt64(segmentLengthStr, 16);
                 if (segmentLength < 1)  // Segment length of 0 indicates end of message
                 {
                     // Read out the final \r\n
+                    Log("End of message detected");
                     headerBuffer = new byte[2];
                     bytesRead = stream.Read(headerBuffer, 0, headerBuffer.Length);
                     break;  // end of stream
@@ -125,7 +202,7 @@ namespace ChunkDecoder
                 #endregion
 
                 #region Read-Data
-
+                 
                 dataBuffer = new byte[segmentLength];
                 bytesRemaining = segmentLength;
 
@@ -134,9 +211,33 @@ namespace ChunkDecoder
                     bytesRead = stream.Read(dataBuffer, 0, dataBuffer.Length);
                     if (bytesRead > 0)
                     {
+                        Log("| Read " + bytesRead + ": " + Encoding.UTF8.GetString(dataBuffer));
+
+                        if (ProcessSignature != null && signatures != null && signatures.Count > 0)
+                        {
+                            foreach (KeyValuePair<string, string> currSignature in signatures)
+                            {
+                                if (!ProcessSignature(currSignature, dataBuffer))
+                                {
+                                    Log("*** Failed to process signature " + currSignature.Key + ", exiting");
+                                    return false;
+                                }
+                            }
+                        }
+
+                        if (ProcessChunk != null)
+                        {
+                            if (!ProcessChunk(dataBuffer))
+                            {
+                                Log("*** Failed to process chunk");
+                                return false;
+                            }
+                        }
+
                         outStream.Write(dataBuffer, 0, bytesRead);
                         bytesRemaining -= bytesRead;
                         contentLength += bytesRead;
+                        Log("| Content length is now " + contentLength);
                     }
                 }
 
@@ -165,6 +266,14 @@ namespace ChunkDecoder
         #endregion
 
         #region Private-Methods
+
+        private void Log(string msg)
+        {
+            if (!String.IsNullOrEmpty(msg) && _ConsoleDebug)
+            {
+                Console.WriteLine(msg);
+            }
+        }
 
         #endregion
     }

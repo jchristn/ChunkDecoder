@@ -1,3 +1,5 @@
+![alt tag](https://github.com/jchristn/chunkdecoder/blob/master/assets/icon.ico)
+
 # ChunkDecoder 
 
 ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly from HTTP.

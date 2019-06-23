@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Decode byte array or stream containing chunk-transfer-encoded data, particularly useful for HTTP data.</Description>
+    <Copyright>(c)2019 Joel Christner</Copyright>
+    <PackageLicenseUrl>https://github.com/jchristn/ChunkDecoder/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jchristn/ChunkDecoder/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/jchristn/ChunkDecoder/master/assets/icon.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/jchristn/ChunkDecoder/</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>chunk encoding http encode transfer</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>

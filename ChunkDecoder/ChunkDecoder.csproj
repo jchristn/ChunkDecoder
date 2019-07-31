@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Decode byte array or stream containing chunk-transfer-encoded data, particularly useful for HTTP data.</Description>
     <Copyright>(c)2019 Joel Christner</Copyright>
@@ -11,8 +11,8 @@
     <RepositoryUrl>https://github.com/jchristn/ChunkDecoder/</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>chunk encoding http encode transfer decoding decode</PackageTags>
-    <PackageReleaseNotes>Added callbacks for handling signatures and handling chunks as they are read.</PackageReleaseNotes>
-    <Version>1.0.2</Version>
+    <PackageReleaseNotes>Added support for .NET 4.6.2</PackageReleaseNotes>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>

@@ -15,6 +15,7 @@ ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly 
 - Callbacks when signatures are found
 - Callbacks as chunks are read
 - Does not support signature verification of chunk data
+- Retarget to also support .NET Framework 4.6.2
 
 ## Usage
 ```

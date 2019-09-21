@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChunkDecoder</name>
+    </assembly>
+    <members>
+        <member name="T:ChunkDecoder.Decoder">
+            <summary>
+            Decode chunk-transfer-encoded streams or byte arrays, particularly from HTTP data.
+            </summary>
+        </member>
+        <member name="P:ChunkDecoder.Decoder.ConsoleDebug">
+            <summary>
+            Enable or disable console debugging.
+            </summary>
+        </member>
+        <member name="F:ChunkDecoder.Decoder.ProcessSignature">
+            <summary>
+            Callback to invoke to process signatures found in the chunk length line.
+            Called before ProcessChunk.
+            Return 'true' to continue operation.  
+            Return 'false' to terminate.
+            </summary>
+        </member>
+        <member name="F:ChunkDecoder.Decoder.ProcessChunk">
+            <summary>
+            Callback to invoke to process a chunk.
+            Called after ProcessSignature.
+            Return 'true' to continue operation.
+            Return 'false' to terminate.
+            </summary>
+        </member>
+        <member name="M:ChunkDecoder.Decoder.#ctor">
+            <summary>
+            Instantiate the object.
+            </summary>
+        </member>
+        <member name="M:ChunkDecoder.Decoder.Decode(System.Byte[],System.Byte[]@)">
+            <summary>
+            Decode a chunk-transfer-encoded byte array to a non-chunked byte array.
+            </summary>
+            <param name="data">Original byte array with chunk-transfer-encoding.</param>
+            <param name="outData">Data without encoding.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:ChunkDecoder.Decoder.Decode(System.IO.Stream,System.Int64@,System.IO.MemoryStream@)">
+            <summary>
+            Decode a chunk-transfer-encoded stream to a non-chunked stream.
+            </summary>
+            <param name="stream">Original stream with chunk-transfer-encoding.</param>
+            <param name="contentLength">Content length of the data in the output stream.</param>
+            <param name="outStream">Output stream containing data without encoding.</param>
+            <returns>True if successful.</returns>
+        </member>
+    </members>
+</doc>

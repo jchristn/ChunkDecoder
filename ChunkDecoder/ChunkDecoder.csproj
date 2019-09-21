@@ -1,18 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Decode byte array or stream containing chunk-transfer-encoded data, particularly useful for HTTP data.</Description>
     <Copyright>(c)2019 Joel Christner</Copyright>
-    <PackageLicenseUrl>https://github.com/jchristn/ChunkDecoder/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/jchristn/ChunkDecoder/</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/jchristn/ChunkDecoder/master/assets/icon.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/jchristn/ChunkDecoder/</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>chunk encoding http encode transfer decoding decode</PackageTags>
     <PackageReleaseNotes>Added support for .NET 4.6.2</PackageReleaseNotes>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Code\Watson\ChunkDecoder\ChunkDecoder\ChunkDecoder.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

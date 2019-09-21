@@ -9,13 +9,9 @@
 
 ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly from HTTP.
 
-## New in v1.0.x
+## New in v1.0.4
 
-- Initial release
-- Callbacks when signatures are found
-- Callbacks as chunks are read
-- Does not support signature verification of chunk data
-- Retarget to also support .NET Framework 4.6.2
+- XML documentation
 
 ## Usage
 ```
@@ -96,5 +92,4 @@ This method should also return ```true```, for the same reason.  ProcessChunk is
 
 ## Version History
 
-v1.0.x
-- Initial release
+Refer to CHANGELOG.md

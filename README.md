@@ -2,10 +2,7 @@
 
 # ChunkDecoder 
 
-[![][nuget-img]][nuget]
-
-[nuget]:     https://www.nuget.org/packages/ChunkDecoder/
-[nuget-img]: https://badge.fury.io/nu/Object.svg
+[![NuGet Version](https://img.shields.io/nuget/v/ChunkDecoder.svg?style=flat)](https://www.nuget.org/packages/ChunkDecoder/) [![NuGet](https://img.shields.io/nuget/dt/ChunkDecoder.svg)](https://www.nuget.org/packages/ChunkDecoder) 
 
 ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly from HTTP.
 

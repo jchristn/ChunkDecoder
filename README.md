@@ -11,7 +11,7 @@ ChunkDecoder is useful to help decode chunk-transfer-encoded data, particularly 
 - XML documentation
 
 ## Usage
-```
+```csharp
 using ChunkDecoder;
 
 public Decoder decoder = new Decoder();
@@ -67,8 +67,9 @@ World<crlf>                  // data.  The value is 'World'.
 ```
 
 You can assigned the ```Decoder.ProcessSignature``` callback, which has the following signature:
-```
+```csharp
 using System.Collections.Generic;
+
 static bool ProcessSignature(KeyValuePair<string, string>, byte[] data)
 {
 	return true;
@@ -78,7 +79,7 @@ static bool ProcessSignature(KeyValuePair<string, string>, byte[] data)
 This method should return ```true```, otherwise ChunkDecoder will assume there is an error and terminate.
 
 If you wish to process each chunk as it is read, set the ```Decoder.ProcessChunk``` callback, which has the followning signature:
-```
+```csharp
 static bool ProcessChunk(byte[] data)
 {
 	return true;
